@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <title>HW</title>
+</head>
+
+<body>
+
+
+
+  <div id="parent"></div>
+
+
+  <script type="text/babel">
+    function Option() {
+      const title = 'HELLO REACT'
+      // useState =>
+      const [txt, setTxt] = React.useState('');
+      const [userInput, setUserInput] = React.useState('');
+      const [option, setOption] = React.useState('');
+      const [team, setTeam] = React.useState({
+        red: [],
+        green: [],
+        blue: [],
+      })
+      const [isListOpen, setIsListOpen] = React.useState(true)
+
+      // functions =>
+      const changeInput = (e) => {
+        setUserInput(e.target.value)
+      }
+      const selectOpt = (e) => {
+        setOption(e.target.value)
+      }
+      const addUsers = () => {
+        if (option && userInput) {
+          setTeam((prevTeam) => ({
+            ...prevTeam, [option]: [...prevTeam[option], userInput]
+          }))
+          setTxt(userInput)
+          setUserInput('')
+          setIsListOpen('false')
+        }
+      };
+      const del = () => {
+        setIsListOpen(!isListOpen);
+      }
+
+      // output =>
+      return (
+        <div className="wrapper">
+          <div className="box">
+            <h1>{title}</h1>
+          </div>
+          <div className="box">
+            <h2>Last user - {txt}</h2>
+            <input id='input' type="text"
+              value={userInput}
+              onChange={changeInput}
+              placeholder="Name"
+            />
+          </div>
+
+          <div className="box">
+            <select value={option} onChange={selectOpt}>
+              <option value="">Selection</option>
+              <option value="red">RED</option>
+              <option value="green">GREEN</option>
+              <option value="blue">BLUE</option>
+            </select>
+          </div>
+
+          <div className="box">
+            <button className="button" onClick={addUsers}>Add</button>
+          </div>
+          <div className="box">
+            <ul className="list">
+              {Object.entries(team).map(([team, members]) => (
+                <li key={team}>
+                  <h2>{team}</h2>
+
+                  <ul>
+                    {members.map((member, i) => (
+                      <li key={i}>
+                        №{i + 1}- {member}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
+      )
+    }
+
+    const wrapper = document.getElementById('parent');
+    const route = ReactDOM.createRoot(wrapper);
+    route.render(<Option />)
+  </script>
+</body>
+
+</html>
